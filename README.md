@@ -30,5 +30,5 @@ resize2fs /dev/mmcblk0p5
 Download and install
 ---
 ```sh
-curl https://raw.github.com/resin-io/docker-install-script/master/install.sh | sh
+curl https://raw.github.com/kimswe/rpi-arch-docker/master/install.sh | sh
 ```
