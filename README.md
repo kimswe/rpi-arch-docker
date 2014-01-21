@@ -26,3 +26,9 @@ sync; reboot
 ...
 resize2fs /dev/mmcblk0p5
 ```
+
+Download and install
+---
+```sh
+curl https://raw.github.com/resin-io/docker-install-script/master/install.sh | sh
+```
