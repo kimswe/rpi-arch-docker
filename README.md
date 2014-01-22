@@ -1,18 +1,19 @@
-# rpi-arch-docker
+# rpi-arch-docker 0.7.5
 
 Updated version of docker installscript, and some stuff to get it all running.
 
-Original at https://github.com/resin-io/docker-install-script
+Blogpost @ http://resin.io/blog/docker-on-raspberry-pi-in-4-simple-steps/
+Original @ https://github.com/resin-io/docker-install-script
 
 Something is weird, the installscript works sometimes and sometimes not. Seems pacman is 'Killed' by the kernel. Could be slow internet, low ram or something. 
 
 I did a reflash, manually downloaded the packages and ran `pacman -U packagename.tar.xz` for all packages, and finally, success!
 
-##Download and install
+###Download and install
     curl https://raw.github.com/kimswe/rpi-arch-docker/master/install.sh | sh
 Might work for you, who knows.
 
-## After Docker Install, resize partition
+###After Docker Install, resize partition
 
 
 ```sh
@@ -38,16 +39,40 @@ resize2fs /dev/mmcblk0p5
 ```
 
 
-## Run docker on startup
+###Run docker on startup
+Enable ip forwarding
 
-Why is my docker.service file not installed in /etc/system? Well it is, i just have to start the service using `systemctl start docker.service`
+    sysctl -w net.ipv4.ip_forward=1
+
+Enable docker.service via 
+https://wiki.archlinux.org/index.php/systemd
+
+    systemctl enable docker.service
+
+Edit /etc/systemd/system/multi-user.target.wants/docker.service to listen to tcp and pipes. (Only if you want to use the api for UI:s etc)
+```
+[Unit]
+Description=Docker Application Container Engine 
+Documentation=http://docs.docker.io
+After=network.target
+
+[Service]
+ExecStartPre=/bin/mount --make-rprivate /
+ExecStart=/usr/bin/docker -d -H tcp://127.0.0.1:4243 -H unix:///var/run/docker.sock -api-enable-cors
+
+[Install]
+WantedBy=multi-user.target
+```
 
 
-##Services
-###Ghost
+
+###Services
+####Base image
+    docker run -t -i resin/rpi-raspbian /bin/bash
+####Ghost
 https://github.com/resin-io/docker-nginx-ghost
 
-###Google Coder
+####Google Coder
     docker run -d -p 8081:8081 resin/rpi-google-coder
 
 
@@ -55,7 +80,7 @@ https://github.com/resin-io/docker-nginx-ghost
 
  
  
-##Pacman cheat sheet
+###Pacman cheat sheet
 ```
 pacman -Sy       # synchronize repository databases if neccessary
 pacman -Syy      # force synchronization of repository databases
