@@ -36,7 +36,8 @@ resize2fs /dev/mmcblk0p5
 
 Startup
 -----
-WHy is my docker.service file not installed?
+WHy is my docker.service file not installed? Well it is, i just have to start the service using `systemctl start docker.service`
+
 
 
 
@@ -49,7 +50,7 @@ Google Coder
 docker run -d -p 8081:8081 resin/rpi-google-coder
 
 
-=======
+
 Download and install
 ---
 ```sh
