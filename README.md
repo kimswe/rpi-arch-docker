@@ -3,6 +3,7 @@
 Updated version of docker installscript, and some stuff to get it all running.
 
 Blogpost @ http://resin.io/blog/docker-on-raspberry-pi-in-4-simple-steps/
+
 Original @ https://github.com/resin-io/docker-install-script
 
 Something is weird, the installscript works sometimes and sometimes not. Seems pacman is 'Killed' by the kernel. Could be slow internet, low ram or something. 
@@ -40,15 +41,23 @@ resize2fs /dev/mmcblk0p5
 
 
 ###Run docker on startup
-Enable ip forwarding
+####Enable ip forwarding
 
     sysctl -w net.ipv4.ip_forward=1
 
-Enable docker.service via 
+Or make it permanent via adding 
+
+    net.ipv4.ip_forward=1 
+to 
+
+    /etc/sysctl.d/99-sysctl.conf
+
+####Enable docker.service via 
 https://wiki.archlinux.org/index.php/systemd
 
     systemctl enable docker.service
 
+####Docker API for UI packages etc
 Edit /etc/systemd/system/multi-user.target.wants/docker.service to listen to tcp and pipes. (Only if you want to use the api for UI:s etc)
 ```
 [Unit]
